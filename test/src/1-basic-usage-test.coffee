@@ -5,6 +5,7 @@ describe 'basic docunit', ->
       expect(results.passed).to.equal(true)
       expect(results.assertions.length).to.equal(1)
       assertion = results.assertions[0]
+      expect(assertion.lineNumber).to.equal(8)
       expect(assertion.actual).to.equal('hello, world')
       expect(assertion.expected).to.equal('hello, world')
       expect(assertion.passed).to.equal(true)

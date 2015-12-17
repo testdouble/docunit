@@ -12,9 +12,9 @@ module.exports = (codeBlock, adapter) ->
   sandbox.__docunit.assertions
 
 preprocessCodeBlock = (codeBlock, adapter) ->
-  _.map codeBlock.split('\n'), (line, i) ->
+  _.map codeBlock.source.split('\n'), (line, i) ->
     if assertion = adapter.assertionFor(line)
-      adapter.logicFor('__docunit', assertion)
+      adapter.logicFor('__docunit', assertion, codeBlock.line + i + 1)
     else
       line
   .join('\n')

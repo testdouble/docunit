@@ -3,7 +3,11 @@ traverse = require('traverse')
 
 module.exports = (markdown) ->
   traverse(markdownToAst(markdown)).reduce (acc, node) ->
-    acc.push(node.value) if node?.type == "CodeBlock"
+    if node?.type == 'CodeBlock'
+      acc.push
+        source: node.value,
+        line: node.loc.start.line,
+        lang: node.lang
     acc
   , []
 
