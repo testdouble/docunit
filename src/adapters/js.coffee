@@ -7,7 +7,7 @@ module.exports =
   #
   # foo // 'bar' // this last comment-comment won't match
   assertionFor: (line) ->
-    if matches = line.match(/^([^\/]*)\/\/([^\/]*)/)
+    if !/^\/\//.test(line) && matches = line.match(/^(.*?)\/\/([^\/]*)/)
       actual: matches[1]
       expected: matches[2]
 
