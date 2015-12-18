@@ -22,6 +22,7 @@ module.exports = (pattern, cb) ->
 
       cb(null,
         passed: _.all(assertions, (a) -> a.passed)
+        files: files
         assertions: assertions
       )
 

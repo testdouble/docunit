@@ -1,7 +1,8 @@
 describe 'basic docunit', ->
   beforeEach -> @subject = require('../../src/docunit')
   it '1-hello-world.md', (done) ->
-    @subject 'test/fixtures/1-hello-world.md', (er, results) ->
+    @subject 'test/fixtures/1-hello-*.md', (er, results) ->
+      expect(results.files).to.deep.equal(['test/fixtures/1-hello-world.md'])
       expect(results.passed).to.equal(true)
       expect(results.assertions.length).to.equal(1)
       assertion = results.assertions[0]
