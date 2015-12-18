@@ -2,13 +2,16 @@ _ = require('lodash')
 vm = require('vm')
 assert = require('assert')
 
+GLOBALS = { Buffer, __dirname, __filename, clearInterval, clearTimeout, console,
+            exports, global, module, process, require, setInterval, setTimeout }
+
 module.exports = (codeBlock, adapter) ->
-  sandbox =
+  sandbox = vm.createContext _.extend {}, GLOBALS,
     __docunit:
       assertions: []
       assert: assert
 
-  vm.runInNewContext(preprocessCodeBlock(codeBlock, adapter), sandbox)
+  vm.runInContext(preprocessCodeBlock(codeBlock, adapter), sandbox)
   sandbox.__docunit.assertions
 
 preprocessCodeBlock = (codeBlock, adapter) ->

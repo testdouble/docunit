@@ -53,3 +53,8 @@ describe 'basic docunit', ->
         lineNumber: 18
 
       done(er)
+
+  it '3-node-glboals.md', (done) ->
+    @subject 'test/fixtures/3-node-globals.md', (er, results) ->
+      expect(results.passed).to.equal(true)
+      done(er)
