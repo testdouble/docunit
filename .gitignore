@@ -1,4 +1,6 @@
-/node_modules
+/node_modules/*
+!/node_modules/docunit
+
 
 #ignore generated from git, include it in npm
 /lib
