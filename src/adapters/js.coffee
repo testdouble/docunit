@@ -7,22 +7,29 @@ module.exports =
   #
   # foo // 'bar' // this last comment-comment won't match
   assertionFor: (line) ->
-    if !/^\/\//.test(line) && matches = line.match(/^(.*?)\/\/([^\/]*)/)
-      actual: matches[1]
-      expected: matches[2]
+    return if /^\/\//.test(line)
+    [actual, expected] = line.split('//')
+    if actual? && expected? && expected[0] != '/'
+      actual: actual.trim()
+      expected: expected.trim()
 
-  logicFor: (globalName, assertion, lineNumber) ->
+  logicFor: (globalName, assertion, assertionIndex) ->
     """
-    var __docunitAssertion = {};
-    __docunitAssertion.lineNumber = #{lineNumber};
-    __docunitAssertion.expected = #{assertion.expected};
-    __docunitAssertion.actual = #{assertion.actual};
-    __docunitAssertion.passed = true;
     try {
-      #{globalName}.assert.deepEqual(__docunitAssertion.actual, __docunitAssertion.expected);
+      var __docunitAssertion = #{globalName}.assertions[#{assertionIndex}]
+      __docunitAssertion.result = {
+        passed: true,
+        actual: #{assertion.actual},
+        expected: #{assertion.expected}
+      };
+      try {
+        #{globalName}.assert.deepEqual(__docunitAssertion.result.actual, __docunitAssertion.result.expected);
+      } catch(e) {
+        __docunitAssertion.result.passed = false;
+      }
+      __docunitAssertion.__done(null)
     } catch(e) {
-      __docunitAssertion.passed = false;
+      __docunitAssertion.__done(e)
     }
-    #{globalName}.assertions.push(__docunitAssertion);
     """
 

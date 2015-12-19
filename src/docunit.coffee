@@ -14,16 +14,17 @@ module.exports = (pattern, cb) ->
     return cb(er) if er?
     async.map files, fs.readFile, (er, markdowns) ->
       return cb(er) if er?
-      assertions = _(markdowns).map (markdown) ->
-        _(findCodeBlocksInMarkdown(markdown.toString())).map (codeBlock) ->
-          runAssertionsInCodeBlock(codeBlock, jsAdapter)
-        .flatten().value()
-      .flatten().value()
-
-      cb(null,
-        passed: _.all(assertions, (a) -> a.passed)
-        files: files
-        assertions: assertions
-      )
+      async.map markdowns, (markdown, cb2) ->
+        async.map findCodeBlocksInMarkdown(markdown.toString()),  (codeBlock, cb3) ->
+          runAssertionsInCodeBlock(codeBlock, jsAdapter, cb3)
+        , cb2
+      , (er, assertions) ->
+        return cb(er) if er?
+        assertions = _.flatten(assertions, true)
+        cb(null,
+          passed: _.all(assertions, (a) -> a.result.passed)
+          files: files
+          assertions: assertions
+        )
 
 
