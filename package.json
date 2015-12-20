@@ -1,6 +1,6 @@
 {
   "name": "docunit",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Makes sure the code examples in your docs actually work",
   "main": "index.js",
   "scripts": {
